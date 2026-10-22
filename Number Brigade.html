@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Number Brigade</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#efe0b8;--card:#f8edce;--ink:#2a1d17;--red:#c1392b;--navy:#23395b;--gold:#e3a72f;--olive:#6b7a3a;--teal:#2f6f73;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--paper:#2b2118;--card:#3b2d21;--ink:#f3e6c4}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#2b2118;--card:#3b2d21;--ink:#f3e6c4}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden}
+body{font-family:Oswald,Impact,'Arial Narrow',sans-serif;font-weight:500;color:var(--ink);background:var(--paper);background-image:radial-gradient(#0002 1px,transparent 1.5px);background-size:6px 6px}
+body::before{content:"";position:fixed;inset:6px;border:4px double var(--ink);pointer-events:none;z-index:9}
+#app{height:100%;position:relative}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;padding:14px 18px;gap:8px;overflow:auto;animation:in .3s}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.big{font-family:'Alfa Slab One',Impact,sans-serif;font-weight:400;color:var(--red);font-size:clamp(2rem,6.4vw,4.4rem);line-height:.95;margin:0;text-transform:uppercase;text-shadow:3px 3px 0 var(--ink),6px 6px 0 var(--gold);letter-spacing:1px}
+.mid{font-size:clamp(1.5rem,4vw,2.6rem)}
+.sm{font-size:clamp(.75rem,1.7vw,1rem);letter-spacing:1.5px;text-transform:uppercase;margin:4px 0 0;opacity:.85}
+.btn{font:inherit;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:var(--c,var(--red));border:3px solid #2a1d17;border-radius:10px;padding:10px 14px;cursor:pointer;box-shadow:0 6px 0 #2a1d17,0 10px 12px #0004;transform:translateY(0);transition:transform .08s,box-shadow .08s;font-size:clamp(.85rem,2vw,1.15rem)}
+.btn:active:not(:disabled){transform:translateY(5px);box-shadow:0 1px 0 #2a1d17}
+.btn:disabled{filter:grayscale(1) brightness(.8);cursor:not-allowed}
+.btn small{display:block;font-size:.7em;opacity:.9;letter-spacing:0}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.pill{background:var(--card);border:3px solid var(--ink);border-radius:30px;padding:3px 12px;font-weight:700;box-shadow:0 3px 0 var(--ink)}
+.home{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:16px;flex:1;min-height:0;align-items:center}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px}
+.menu .wide{grid-column:span 2}
+.stage{position:relative;overflow:hidden;height:100%;min-height:200px;border:4px solid var(--ink);border-radius:14px;box-shadow:0 8px 0 var(--ink),0 14px 20px #0005;perspective:700px;display:flex;align-items:flex-end;justify-content:center}
+.bgr{position:absolute;left:50%;top:75%;width:260vmax;height:260vmax;margin:-130vmax 0 0 -130vmax;animation:spin 120s linear infinite}
+.bgr.still{animation:none;inset:0;width:auto;height:auto;margin:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pod{position:absolute;bottom:12px;width:62%;height:40px;background:#4a392e;border-radius:50%;box-shadow:0 10px 0 #1a120d,inset 0 6px 0 #7a6352}
+.char{position:relative;margin-bottom:34px;transform-style:preserve-3d;transform:rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg));transition:transform .15s;filter:drop-shadow(0 12px 6px #0006)}
+.char svg{animation:bob 2.2s ease-in-out infinite;display:block;max-height:100%}
+@keyframes bob{50%{transform:translateY(-8px) scale(1.02,.98)}}
+.cl{position:absolute;font-size:2.2rem;animation:drift 20s linear infinite;opacity:.9}
+@keyframes drift{from{left:-15%}to{left:110%}}
+.chip{position:absolute;top:8px;left:8px;font-size:1.9rem;background:var(--card);border:3px solid #2a1d17;border-radius:50%;width:48px;height:48px;display:grid;place-items:center;box-shadow:0 4px 0 #2a1d17;color:#2a1d17}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;gap:10px;flex:1;min-height:0}
+.lv{--c:var(--sc);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:clamp(1.1rem,3.4vw,2rem);padding:2px}
+.lv small{font-size:.5em;color:#ffe08a}
+.lv.fin{outline:4px dashed var(--ink);outline-offset:2px}
+.hud{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.hud b{font-size:clamp(.8rem,2.2vw,1.1rem);letter-spacing:1px}
+.bar{height:14px;border:3px solid var(--ink);border-radius:8px;background:var(--card);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red);transition:width .4s}
+.ms{display:flex;align-items:center;gap:8px;min-height:50px;font-weight:700}
+.qp{background:var(--card);border:4px solid var(--ink);border-radius:12px;box-shadow:0 6px 0 var(--ink);padding:8px 12px;text-align:center}
+.qh{font-size:clamp(.7rem,1.6vw,.95rem);letter-spacing:2px;color:var(--red);font-weight:700}
+.qe{font-family:'Alfa Slab One',Impact,sans-serif;font-size:clamp(1.8rem,6vw,3.4rem)}
+.vis{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;font-size:clamp(1.1rem,3.5vw,2rem)}
+.io{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px}
+.paths{display:flex;gap:12px;width:100%;justify-content:center}
+.paths .btn{flex:1;max-width:200px;font-size:clamp(1.4rem,5vw,2.6rem);padding:12px 4px}
+.paths .btn span{display:block;font-size:.6em}
+.pad{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:min(420px,100%)}
+.pad .btn{padding:8px 0;--c:var(--navy)}
+.disp{font-family:'Alfa Slab One',Impact,sans-serif;font-size:2.2rem;min-width:140px;text-align:center;background:var(--card);border:3px solid var(--ink);border-radius:10px;padding:0 14px;min-height:54px}
+.tray{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;align-content:flex-end;min-height:70px;width:100%;max-width:560px;border:3px dashed var(--ink);border-radius:10px;padding:6px}
+.blk{width:clamp(20px,4.6vw,32px);height:clamp(20px,4.6vw,32px);border-radius:5px;border:2px solid #2a1d17;box-shadow:inset -3px -3px 0 #0003,inset 3px 3px 0 #fff4,0 3px 0 #2a1d17;animation:pop .2s}
+@keyframes pop{from{transform:scale(0)}}
+.tiles{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.tiles .btn{--c:var(--teal);font-size:clamp(1.1rem,3.6vw,2rem)}
+.tiles .btn.done{--c:var(--olive);opacity:.5}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.chibi{--s:64px;position:relative;width:var(--s);height:var(--s);border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff8,#f3c97a 60%,#d99c3c);border:3px solid #2a1d17;display:grid;place-items:center;flex:none;box-shadow:0 4px 0 #2a1d17}
+.chibi span{font-size:calc(var(--s)*.66);line-height:1}
+.chibi i{position:absolute;bottom:22%;width:20%;height:12%;border-radius:50%;background:#e8536b;opacity:.55}
+.chibi i:nth-of-type(1){left:6%}.chibi i:nth-of-type(2){right:6%}
+.panel{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,40px);background:var(--card);border:5px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:14px;position:relative;background-image:repeating-conic-gradient(#e3a72f33 0 6deg,transparent 6deg 12deg)}
+.bub{position:relative;background:#fff;color:#2a1d17;border:4px solid #2a1d17;border-radius:24px;padding:14px 18px;font-size:clamp(1rem,3vw,1.7rem);max-width:380px;box-shadow:4px 4px 0 #2a1d17}
+.num{position:absolute;right:12px;top:10px;font-family:'Alfa Slab One',Impact,sans-serif;background:var(--red);color:#fff;border:3px solid #2a1d17;padding:2px 12px;transform:rotate(4deg);font-size:clamp(1rem,3vw,1.8rem);box-shadow:3px 3px 0 #2a1d17}
+.tag{text-align:center;font-weight:700;background:var(--navy);color:#fff;padding:1px 10px;border:2px solid #2a1d17;margin-top:6px}
+.shop{display:grid;grid-template-columns:minmax(120px,1fr) 2.4fr;gap:14px;flex:1;min-height:0}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;align-content:start;overflow:auto;padding:2px 2px 10px}
+.it{--c:var(--card);color:var(--ink);padding:4px;display:flex;flex-direction:column;align-items:center;font-size:.85rem}
+.it.on{--c:var(--gold);color:#2a1d17}
+.sw{display:inline-block;width:34px;height:34px;border-radius:50%;border:3px solid #2a1d17;margin:3px;cursor:pointer;box-shadow:0 3px 0 #2a1d17}
+.sw.on{outline:3px solid var(--red);outline-offset:2px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.cr{display:flex;gap:16px;flex:1;min-height:0;align-items:center;justify-content:center;flex-wrap:wrap}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;flex:1;align-content:center}
+.how div{background:var(--card);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:8px 12px;font-size:clamp(.85rem,1.8vw,1.05rem)}
+.how b{color:var(--red)}
+input.nm{font:inherit;font-size:1.3rem;padding:8px 12px;border:3px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);width:min(260px,90%);text-align:center}
+.cen{align-items:center;justify-content:center;text-align:center;gap:14px}
+@media (max-width:760px){.home{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr) auto;gap:10px}.home>div:first-child{text-align:center}.menu{gap:8px 8px}.menu .btn{padding:6px 4px}.scr{padding:12px 12px}.shop{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
+</style></head><body><div id="app"></div>
+<script>
+const $=s=>document.querySelector(s),R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),K='nb_v1';
+const def=()=>({name:'',skin:'#e8b48a',hair:'#2a1d17',hs:'short',outfit:'#6b7a3a',hat:'none',bg:'sun',badge:'★',coins:0,own:['none','#6b7a3a','#23395b','sun','★'],pr:{},made:0});
+let S,G,tab='hat';try{S=JSON.parse(localStorage.getItem(K))||def()}catch(e){S=def()}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const SEC={count:{n:'Counting',h:'गिनती',c:'#c1392b'},add:{n:'Addition',h:'जोड़',c:'#23395b'},sub:{n:'Subtraction',h:'घटाव',c:'#6b7a3a'},mul:{n:'Multiplication',h:'गुणा',c:'#b8821a'},div:{n:'Division',h:'भाग',c:'#2f6f73'}};
+const SD={count:'Count it, spot it, line it up!',add:'Join forces and add them up!',sub:'Take away, find what is left!',mul:'Groups upon groups, quick!',div:'Share equally with the squad!'};
+const ANI={mitu:['🐒','Mitu'],gajju:['🐘','Gajju'],billu:['🐱','Billu'],chintu:['🦜','Chintu'],rani:['🐯','Rani'],bunty:['🐰','Bunty']};
+const chibi=(k,s=64)=>`<div class="chibi" style="--s:${s}px"><span>${ANI[k][0]}</span><i></i><i></i></div>`;
+const BG={sun:['repeating-conic-gradient(#e3a72f 0 7deg,#c1392b 7deg 14deg)',1,'Red Sunburst',0],field:['repeating-conic-gradient(#9aa85a 0 7deg,#6b7a3a 7deg 14deg)',1,'Green Rays',20],night:['repeating-conic-gradient(#35568a 0 7deg,#23395b 7deg 14deg)',1,'Night Rays',25],sunset:['linear-gradient(#e3a72f,#d9622b 55%,#7a2a2a)',0,'Sunset',30],mint:['repeating-linear-gradient(45deg,#4a8d8a 0 14px,#3b7774 14px 28px)',0,'Teal Stripes',35]};
+const HATS={none:['—',0],cap:['Cap',10],pagdi:['Pagdi',20],helmet:['Helmet',25],flower:['Flower',15],crown:['Crown',40]};
+const OUT={'#6b7a3a':0,'#23395b':0,'#c1392b':15,'#e3a72f':15,'#2f6f73':20,'#7a3b6e':25};
+const BAD={'★':0,'🌾':15,'🦚':25,'🚀':30,'🦁':40};
+function av(o,sz=150){const k='#2a1d17',st=`stroke="${k}" stroke-width="3"`,h=o.hair;
+let hr=`<path d="M24 50c-2-24 14-32 26-32s28 8 26 32c-6-10-14-14-26-14s-20 4-26 14z" fill="${h}" ${st}/>`;
+if(o.hs=='long')hr=`<rect x="21" y="44" width="11" height="40" rx="5" fill="${h}" ${st}/><rect x="68" y="44" width="11" height="40" rx="5" fill="${h}" ${st}/>`+hr;
+if(o.hs=='bun')hr=`<circle cx="50" cy="15" r="10" fill="${h}" ${st}/>`+hr;
+const H={none:'',cap:`<path d="M24 40c0-24 52-24 52 0z" fill="#c1392b" ${st}/><rect x="46" y="36" width="36" height="7" rx="3" fill="#c1392b" ${st}/>`,pagdi:`<ellipse cx="50" cy="30" rx="29" ry="15" fill="#e3a72f" ${st}/><path d="M26 32q24 12 48 0" fill="none" ${st}/><circle cx="50" cy="22" r="4" fill="#c1392b"/>`,helmet:`<path d="M22 42c0-26 56-26 56 0z" fill="#6b7a3a" ${st}/><rect x="19" y="40" width="62" height="6" rx="3" fill="#55612d" ${st}/><path d="M50 16l3 8h-6z" fill="#e3a72f"/>`,flower:`<circle cx="70" cy="28" r="9" fill="#e8536b" ${st}/><circle cx="70" cy="28" r="3.5" fill="#e3a72f"/>`,crown:`<path d="M26 36l4-22 12 12 8-16 8 16 12-12 4 22z" fill="#e3a72f" ${st}/>`};
+return `<svg viewBox="0 0 100 130" width="${sz}" height="${sz*1.3}"><path d="M20 128c0-26 12-40 30-40s30 14 30 40z" fill="${o.outfit}" ${st}/><text x="50" y="116" font-size="17" text-anchor="middle" fill="#fff" stroke="#2a1d17" stroke-width=".6">${o.badge}</text><circle cx="50" cy="52" r="26" fill="${o.skin}" ${st}/>${hr}<circle cx="41" cy="54" r="3.4" fill="#2a1d17"/><circle cx="59" cy="54" r="3.4" fill="#2a1d17"/><circle cx="42" cy="53" r="1.1" fill="#fff"/><circle cx="60" cy="53" r="1.1" fill="#fff"/><circle cx="33" cy="62" r="4.5" fill="#e8536b" opacity=".5"/><circle cx="67" cy="62" r="4.5" fill="#e8536b" opacity=".5"/><path d="M43 63q7 7 14 0" fill="none" stroke="#2a1d17" stroke-width="2.5" stroke-linecap="round"/>${H[o.hat]}</svg>`}
+let AC;function beep(f,d=.12){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type='square';o.frequency.value=f;g.gain.value=.05;o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
+function say(t){try{const u=new SpeechSynthesisUtterance(String(t).replace('×',' times ').replace('÷',' divided by ').replace('−',' minus ').replace('+',' plus ').replace('?',' what'));u.lang='en-IN';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+const scr=(h,c='')=>{$('#app').innerHTML=`<div class="scr ${c}">${h}</div>`};
+const stg=(o,w='100%')=>{const b=BG[o.bg];return `<div class="stage" onmousemove="tilt(event,this)" onmouseleave="this.firstChild.nextSibling&&0"><div class="bgr ${b[1]?'':'still'}" style="background:${b[0]}"></div><span class="cl" style="top:8%">☁️</span><span class="cl" style="top:26%;animation-delay:-9s;font-size:1.6rem">🎏</span><div class="chip">${o.badge}</div><div class="pod"></div><div class="char">${av(o,Math.min(170,innerHeight*.28))}</div></div>`};
+function tilt(e,s){const r=s.getBoundingClientRect(),c=s.querySelector('.char');c.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*40+'deg');c.style.setProperty('--rx',-((e.clientY-r.top)/r.height-.5)*20+'deg')}
+const coin=()=>`<span class="pill">🪙 ${S.coins}</span>`;
+const back=(f='home()')=>`<button class="btn" style="--c:#23395b" onclick="${f}">◀ Back</button>`;
+function start(){S.made?home():create()}
+function create(){scr(`<div class="top"><h1 class="big mid">Enlist your hero!</h1></div><p class="sm">Make your character first. You can change it later.</p><div class="cr"><div id="pv">${av(S,170)}</div><div><input class="nm" id="nm" maxlength="12" placeholder="Hero name" value="${S.name}"><p class="sm">Skin</p>${['#f6d1b0','#e8b48a','#c68a5c','#9a6137','#6e4326'].map(c=>sw('skin',c)).join('')}<p class="sm">Hair colour</p>${['#2a1d17','#5a3a22','#a0522d','#e3a72f','#777'].map(c=>sw('hair',c)).join('')}<p class="sm">Hair style</p>${['short','long','bun'].map(s=>`<button class="btn" style="--c:#6b7a3a;padding:6px 10px" onclick="cs('hs','${s}')">${s}</button>`).join(' ')}</div></div><div style="text-align:center"><button class="btn" onclick="fin()">Report for duty! ★</button></div>`)}
+const sw=(k,c)=>`<span class="sw ${S[k]==c?'on':''}" style="background:${c}" onclick="cs('${k}','${c}',1)"></span>`;
+function cs(k,v,r){S[k]=v;$('#pv').innerHTML=av(S,170);if(r)create2()}
+function create2(){const n=$('#nm').value;create();$('#nm').value=n}
+function fin(){S.name=$('#nm').value.trim()||'Hero';S.made=1;save();home()}
+function home(){const g=Object.keys(SEC).map(k=>`<button class="btn" style="--c:${SEC[k].c}" onclick="levels('${k}')">${SEC[k].n}<small>${SEC[k].h}</small></button>`).join('');
+scr(`<div class="top">${coin()}<span class="pill">${S.badge} ${S.name}</span><button class="btn" style="padding:4px 10px" onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme=='dark'?'light':'dark'">◐</button></div><div class="home"><div><h1 class="big">Number<br>Brigade!</h1><p class="sm">Count, add and win the day. Join the squad and make every number count!</p></div>${stg(S)}<div class="menu">${g}<button class="btn" style="--c:#c1392b" onclick="story(0)">Story Mode<small>Comics</small></button><button class="btn" style="--c:#b8821a" onclick="shop()">Shop<small>Coins</small></button><button class="btn" style="--c:#23395b" onclick="how()">How to Play</button><button class="btn" style="--c:#6b7a3a" onclick="create()">Wardrobe</button></div></div>`)}
+function stars(s,i){return '★'.repeat(s)+'☆'.repeat(3-s)}
+function levels(k){const p=S.pr[k]||[];let h=`<div class="top">${back()}${coin()}</div><div><h1 class="big mid">${SEC[k].n} <span style="font-size:.6em">${SEC[k].h}</span></h1><p class="sm">${SD[k]} Levels 21–25 are FINAL: one slip and you restart!</p></div><div class="grid5">`;
+for(let L=1;L<=25;L++){const ok=L==1||(p[L-2]>0);h+=`<button class="btn lv ${L>20?'fin':''}" style="--sc:${SEC[k].c}" ${ok?`onclick="play('${k}',${L})"`:'disabled'}>${ok?L:'🔒'}<small>${ok?stars(p[L-1]||0):''}</small></button>`}scr(h+'</div>')}
+function gen(s,L){let a,b;
+if(s=='count'){if(L<=8){const n=R(1,Math.min(5+L*2,20));return{e:'How many?',a:n,v:n}}const n=R(3,L*3),d=R(1,Math.min(10,Math.ceil(L/3)));return{e:`${n}, ${n+d}, ${n+2*d}, ?`,a:n+3*d}}
+const m=5+L*4;
+if(s=='add'){a=R(1,L<4?7:m);b=R(1,L<4?10-a||1:m);return{e:`${a} + ${b}`,a:a+b}}
+if(s=='sub'){a=R(2,L<4?10:m);b=R(1,a-1);return{e:`${a} − ${b}`,a:a-b}}
+const x=Math.min(12,2+Math.ceil(L/2)),y=Math.min(12,2+Math.ceil(L/2.5));
+if(s=='mul'){a=R(2,x);b=R(1,y);return{e:`${a} × ${b}`,a:a*b}}
+b=R(2,x);const q=R(1,y);return{e:`${b*q} ÷ ${b}`,a:q}}
+const opts=a=>{const s=new Set([a]),sp=Math.max(2,Math.ceil(a/6));while(s.size<3){const d=a+R(-sp-2,sp+2);if(d>=0&&d!=a)s.add(d)}return[...s].sort(()=>Math.random()-.5)};
+const hearts=()=>'❤️'.repeat(G.lives)+'🖤'.repeat(3-G.lives);
+function play(sec,L){G={sec,L,i:0,n:5+Math.floor(L/2),lives:3,fin:L>20,earn:0};nextQ()}
+function nextQ(){if(G.i>=G.n)return win();
+let q=gen(G.sec,G.L),t=['path','write','blocks','sort','path','write'][G.i%6];if(t=='blocks'&&q.a>20)t='write';
+G.q=q;G.t=t;G.inp='';G.b=0;G.lock=0;G.so=[];
+const H={path:'Pick the right path!',write:'Write the number!',blocks:'Stack the blocks!',sort:'Order from smallest to biggest!'};
+let qp,io;
+if(t=='sort'){const it=[],sn=new Set,cnt=G.L>6?4:3;for(let k=0;k<40&&it.length<cnt;k++){const x=G.sec=='count'?(n=>({e:''+n,a:n}))(R(1,5+G.L*3)):gen(G.sec,G.L);if(!sn.has(x.a)){sn.add(x.a);it.push(x)}}
+G.it=it.sort(()=>Math.random()-.5);qp=`<div class="qe" style="font-size:1.4rem">${G.sec=='count'?'Tap the numbers in order':'Solve each, then tap in order of answers'}</div>`;
+io=`<div class="tiles" id="tl">${G.it.map((x,i)=>`<button class="btn" id="t${i}" onclick="srt(${i})">${x.e}</button>`).join('')}</div><div class="disp" id="disp" style="font-size:1.4rem;min-width:200px">&nbsp;</div>`}
+else{qp=`<div class="qe">${q.e}</div>${q.v?`<div class="vis">${['🍎','🥭','🍌','⭐','🪁'][G.L%5].repeat(q.v)}</div>`:''}`;
+if(t=='path')io=`<div class="paths">${opts(q.a).map((o,i)=>`<button class="btn" style="--c:${['#c1392b','#23395b','#6b7a3a'][i]}" onclick="pick(${o},this)"><span>${['⬅️','⬆️','➡️'][i]}</span>${o}</button>`).join('')}</div>`;
+if(t=='write')io=`<div class="disp" id="disp">&nbsp;</div><div class="pad">${[1,2,3,4,5,6,7,8,9,0].map(d=>`<button class="btn" onclick="key(${d})">${d}</button>`).join('')}<button class="btn" style="--c:#c1392b" onclick="key('x')">⌫</button><button class="btn" style="--c:#6b7a3a;grid-column:span 4" onclick="key('ok')">OK ✔</button></div>`;
+if(t=='blocks')io=`<div class="tray" id="tray"></div><div class="disp" id="disp">0</div><div style="display:flex;gap:10px"><button class="btn" onclick="bl(-1)" style="--c:#23395b">− Block</button><button class="btn" onclick="bl(1)" style="--c:#b8821a">+ Block</button><button class="btn" onclick="bl(0)" style="--c:#6b7a3a">Check ✔</button></div>`}
+scr(`<div class="hud"><button class="btn" style="padding:4px 10px" onclick="levels('${G.sec}')">✕</button><b>${SEC[G.sec].n} · LEVEL ${G.L}${G.fin?' · FINAL':''}</b><span class="pill" id="hr">${hearts()}</span>${coin()}</div><div class="bar"><i style="width:${G.i/G.n*100}%"></i></div><div class="ms" id="ms">${chibi('mitu',44)}<span>Question ${G.i+1} of ${G.n}</span></div><div class="qp" id="qp"><div class="qh">${H[t]} <button class="btn" style="padding:0 8px;font-size:1rem" onclick="say(G.q.e)">🔊</button></div>${qp}</div><div class="io">${io}</div>`)}
+function msg(k,t){$('#ms').innerHTML=chibi(k,44)+`<span>${t}</span>`}
+function good(){if(G.lock)return;G.lock=1;beep(660);setTimeout(()=>beep(880),110);S.coins+=2;G.earn+=2;save();msg('mitu','Shabash! Correct! +2 🪙');G.i++;setTimeout(nextQ,900)}
+function bad(el){beep(160,.25);G.lives--;$('#hr').innerHTML=hearts();$('#qp').classList.remove('shake');void $('#qp').offsetWidth;$('#qp').classList.add('shake');
+if(el){el.disabled=true}if(G.fin||G.lives<=0){G.lock=1;return setTimeout(lose,700)}msg('gajju','Rethink your choices! Try again 🤔')}
+function pick(v,el){if(G.lock)return;v==G.q.a?good():bad(el)}
+function key(d){if(G.lock)return;if(d=='x')G.inp=G.inp.slice(0,-1);else if(d=='ok'){if(G.inp==='')return;if(+G.inp==G.q.a)return good();G.inp='';bad()}else if(G.inp.length<4)G.inp+=d;$('#disp').textContent=G.inp||'\u00a0'}
+function bl(d){if(G.lock)return;if(d==0){return G.b==G.q.a?good():bad()}G.b=Math.max(0,Math.min(30,G.b+d));$('#disp').textContent=G.b;const cs=['#c1392b','#e3a72f','#23395b','#6b7a3a'];$('#tray').innerHTML=Array.from({length:G.b},(_, i)=>`<div class="blk" style="background:${cs[i%4]}"></div>`).join('')}
+function srt(i){if(G.lock||G.so.includes(i))return;const rest=G.it.filter((_, j)=>!G.so.includes(j)),mn=Math.min(...rest.map(x=>x.a));
+if(G.it[i].a==mn){G.so.push(i);$('#t'+i).classList.add('done');$('#t'+i).disabled=true;$('#disp').textContent=G.so.map(j=>G.it[j].a).join(' < ');if(G.so.length==G.it.length)good()}else bad()}
+function lose(){beep(120,.5);scr(`<h1 class="big">Mission<br>Failed!</h1>${chibi('gajju',90)}<p class="sm">${G.fin?'Final stage rule: one wrong answer means starting again. You can do it!':'You are out of lives. Take a breath and try again!'}</p><div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><button class="btn" onclick="play('${G.sec}',${G.L})">Try again ↻</button><button class="btn" style="--c:#23395b" onclick="levels('${G.sec}')">Levels</button></div>`,'cen')}
+function win(){const st=G.lives,bn=10+G.L+st*3;S.coins+=bn;const p=S.pr[G.sec]=S.pr[G.sec]||[];p[G.L-1]=Math.max(p[G.L-1]||0,st);save();[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.15),i*130));
+scr(`<h1 class="big">Victory!</h1>${chibi('billu',90)}<div class="big mid" style="color:var(--gold)">${stars(st)}</div><p class="sm">Level ${G.L} cleared! Bonus +${bn} 🪙 (total ${S.coins})</p><div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">${G.L<25?`<button class="btn" onclick="play('${G.sec}',${G.L+1})">Next level ▶</button>`:''}<button class="btn" style="--c:#23395b" onclick="levels('${G.sec}')">Levels</button><button class="btn" style="--c:#6b7a3a" onclick="home()">Home</button></div>`,'cen')}
+const ST=[['mitu','Mitu found 3 mangoes, then 2 more. Now he has 5 mangoes!','3 + 2 = 5'],['gajju','Gajju had 8 laddoos and shared 4 with a friend. 4 are left!','8 − 4 = 4'],['billu','Billu put 4 fish in each of 3 pots. 12 fish in all!','4 × 3 = 12'],['chintu','Chintu shared 10 seeds with 2 friends. 5 each!','10 ÷ 2 = 5'],['rani','Rani climbed the hill: 1, 2, 3, 4, 5 steps!','1 2 3 4 5'],['bunty','Bunty had 6 carrots and got 6 more. 12 carrots!','6 + 6 = 12'],['gajju','Gajju drank 2 jugs of water a day for 5 days. 10 jugs!','2 × 5 = 10'],['billu','Billu had 9 toy balls and lost 3 under the bed. 6 left!','9 − 3 = 6'],['rani','Rani gave 12 biscuits to 4 cubs. 3 each, no fights!','12 ÷ 4 = 3'],['chintu','Chintu sang 7 songs on Monday and 7 on Tuesday. 14 songs!','7 + 7 = 14']];
+function story(i){const[a,t,n]=ST[i];scr(`<div class="top">${back()}<span class="pill">Story ${i+1} / ${ST.length}</span></div><div><h1 class="big mid">Story Mode</h1><p class="sm">Tiny number tales. Just sit back and enjoy!</p></div><div class="panel"><div class="num">${n}</div><div><div style="transform:scale(1.5);transform-origin:bottom center;margin-bottom:26px">${chibi(a,clamp())}</div><div class="tag">${ANI[a][1]}</div></div><div class="bub">${t}</div></div><div style="display:flex;justify-content:space-between"><button class="btn" ${i?`onclick="story(${i-1})"`:'disabled'}>◀ Prev</button><button class="btn" ${i<ST.length-1?`onclick="story(${i+1})"`:'disabled'}>Next ▶</button></div>`)}
+const clamp=()=>Math.max(60,Math.min(110,innerHeight*.14));
+function how(){scr(`<div class="top">${back()}</div><div><h1 class="big mid">How to Play</h1><p class="sm">Four easy rules for every brave recruit</p></div><div class="how"><div><b>1. Pick a lesson</b><br>Choose Counting, Addition, Subtraction, Multiplication or Division. Clear a level to unlock the next one.</div><div><b>2. Play the puzzles</b><br>Pick a path, write the number, stack blocks, or put numbers in order. Tap 🔊 to hear the question.</div><div><b>3. Guard your 3 lives</b><br>A wrong answer costs a life ❤️ and Mitu says to rethink. No lives left? Try the level again.</div><div><b>4. Final stages</b><br>Levels 21–25 are tough: ONE wrong answer and you start the level over!</div><div><b>5. Earn coins 🪙</b><br>Every right answer pays coins. Spend them in the Shop on hats, outfits, badges and lobby backgrounds.</div><div><b>6. Read stories</b><br>Story Mode has tiny comics with animal friends. No questions, just fun!</div></div>`)}
+function shop(){const L={hat:Object.keys(HATS),out:Object.keys(OUT),bg:Object.keys(BG),bad:Object.keys(BAD)},cost=(t,k)=>t=='hat'?HATS[k][1]:t=='out'?OUT[k]:t=='bg'?BG[k][3]:BAD[k],fld={hat:'hat',out:'outfit',bg:'bg',bad:'badge'}[tab];
+const cells=L[tab].map(k=>{const c=cost(tab,k),own=S.own.includes(k),on=S[fld]==k,pv=tab=='bg'?`<div style="width:60px;height:50px;border:2px solid #2a1d17;background:${BG[k][0]}"></div>`:tab=='bad'?`<div style="font-size:2rem">${k}</div>`:av({...S,[fld]:k},44),nm=tab=='hat'?HATS[k][0]:tab=='bg'?BG[k][2]:tab=='bad'?'Badge':'Outfit';
+return `<button class="btn it ${on?'on':''}" onclick="buy('${k}',${c})">${pv}<span>${nm}</span><b>${on?'✔ Using':own?'Equip':'🪙 '+c}</b></button>`}).join('');
+scr(`<div class="top">${back()}${coin()}</div><div><h1 class="big mid">Supply Shop</h1><p class="sm">Spend your coins on gear for your hero and lobby</p></div><div class="tabs">${[['hat','Hats'],['out','Outfits'],['bg','Lobby'],['bad','Logos']].map(([k,n])=>`<button class="btn" style="--c:${tab==k?'#c1392b':'#23395b'};padding:6px 12px" onclick="tab='${k}';shop()">${n}</button>`).join('')}</div><div class="shop"><div style="display:flex;justify-content:center">${stg(S)}</div><div class="items">${cells}</div></div>`)}
+function buy(k,c){const fld={hat:'hat',out:'outfit',bg:'bg',bad:'badge'}[tab];if(!S.own.includes(k)){if(S.coins<c){beep(150,.2);return alert('Need more coins! Keep playing 🪙')}S.coins-=c;S.own.push(k)}S[fld]=k;save();beep(700);shop()}
+start();
+</script></body></html>
